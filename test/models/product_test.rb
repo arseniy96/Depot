@@ -18,20 +18,19 @@ class ProductTest < ActiveSupport::TestCase
 			image_url: "zzz.jpg")
     product.price = -1
     assert product.invalid?
-    assert_equal ["must be greater than or equal to 0.01"],
-      product.errors[:price]
+    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
+
     product.price = 0
-    
     assert product.invalid?
-    assert_equal ["must be greater than or equal to 0.01"],
-      product.errors[:price]
+    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
+
     product.price = 1
     assert product.valid?
   end
 
   def new_product(image_url)
     Product.new(title: "My Book Title", description: "yyy",
-		price: 1, image_url: image_url)
+                price: 1, image_url: image_url)
   end
 
   test "image url" do
@@ -52,8 +51,15 @@ class ProductTest < ActiveSupport::TestCase
     product = Product.new(title: products(:ruby).title, description: "yyy", image_url: "abc.jpg", price: 1)
 
     assert product.invalid?
-
     assert_equal ["has already been taken"], product.errors[:title]
+  end
+
+  test "title length" do
+    product1 = Product.new(title: "My Book Title", description: "yyy", image_url: "abc.gif", price:1)
+    assert product1.valid?
+
+    product2 = Product.new(title: "My", description: "yyy", image_url: "abc.gif", price:1)
+    assert product2.invalid?
   end
 
 end
